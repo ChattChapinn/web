@@ -6,135 +6,159 @@
   <title>╔═ CHAT CHAPIN ═╗</title>
   <link rel="icon" type="image/png" href="favicon.png" />
   <style>
+    :root {
+      --neon: #00ffff;
+      --bg1: #0a0f1a;
+      --bg2: #05070d;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100dvh; /* mejor que 100vh en móvil */
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      background: radial-gradient(circle at center, #0a0f1a 0%, #05070d 100%);
-      overflow: hidden;
-      font-family: 'Inter', sans-serif;
-      color: white;
+      justify-content: center;
+      background: radial-gradient(circle at center, var(--bg1) 0%, var(--bg2) 100%);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      color: #fff;
       text-align: center;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+      overflow-x: hidden;   /* evita scroll horizontal */
+      overflow-y: auto;     /* permite scroll si algo crece */
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      width: min(920px, 100%);
+      display: grid;
+      place-items: center;
+      gap: 16px;
     }
 
     h1 {
-      position: relative;
-      z-index: 2;
-      font-size: 3rem;
-      text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 80px #00ffff;
+      margin: 0 0 8px;
       letter-spacing: 3px;
-      margin-bottom: 20px;
+      font-weight: 800;
+      font-size: clamp(1.75rem, 6vw, 3rem);
+      text-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px var(--neon);
       animation: glowPulse 2s ease-in-out infinite;
     }
 
     @keyframes glowPulse {
-      0%, 100% { text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 80px #00ffff; }
-      50% { text-shadow: 0 0 10px #0077ff, 0 0 20px #00ffff, 0 0 40px #00ffff; }
+      0%, 100% { text-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon), 0 0 80px var(--neon); }
+      50% { text-shadow: 0 0 10px #0077ff, 0 0 20px var(--neon), 0 0 40px var(--neon); }
     }
 
     .logo {
-      width: 110px;
-      height: 110px;
-      margin-bottom: 20px;
-      position: relative;
-      z-index: 2;
+      width: clamp(72px, 22vw, 110px);
+      height: auto;
+      aspect-ratio: 1 / 1;
+      margin-bottom: 8px;
       animation: rotateLogo 6s linear infinite, pulseGlow 2.5s ease-in-out infinite;
-      filter: drop-shadow(0 0 20px #00ffff);
+      filter: drop-shadow(0 0 20px var(--neon));
     }
 
-    @keyframes rotateLogo {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes rotateLogo { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     @keyframes pulseGlow {
-      0%, 100% { filter: drop-shadow(0 0 20px #00ffff) brightness(1); }
-      50% { filter: drop-shadow(0 0 40px #00ffff) brightness(1.3); }
+      0%, 100% { filter: drop-shadow(0 0 20px var(--neon)) brightness(1); }
+      50% { filter: drop-shadow(0 0 40px var(--neon)) brightness(1.25); }
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;             /* sustituye margin-left */
+      width: 100%;
+      max-width: 560px;
+      margin-top: 6px;
     }
 
     .btn {
+      appearance: none;
       background: transparent;
-      border: 2px solid #00ffff;
-      color: #00ffff;
-      padding: 12px 24px;
-      font-size: 1.1rem;
-      border-radius: 8px;
+      border: 2px solid var(--neon);
+      color: var(--neon);
+      padding: 12px 18px;
+      font-size: clamp(0.95rem, 3.4vw, 1.1rem);
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease;
       text-transform: uppercase;
-      text-shadow: 0 0 10px #00ffff;
+      text-shadow: 0 0 10px var(--neon);
       box-shadow: 0 0 15px rgba(0,255,255,0.3);
+      width: max(220px, 40%);
+      white-space: nowrap;
     }
 
-    .btn:hover {
-      background: #00ffff;
+    .btn:hover, .btn:focus-visible {
+      background: var(--neon);
       color: #000;
-      box-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff;
-      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--neon), 0 0 50px var(--neon);
+      transform: translateY(-2px);
+      outline: none;
     }
 
+    /* Mobile-first: en pantallas estrechas, apila botones */
+    @media (max-width: 480px) {
+      .actions { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; padding: 14px 18px; }
+    }
+
+    /* Canvas de partículas al fondo */
     canvas#particles-bg {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
-      z-index: -1;
+      z-index: 0;
       background: radial-gradient(circle at center, #000 0%, #020305 100%);
+    }
+
+    /* Reduce animaciones si el usuario lo pide */
+    @media (prefers-reduced-motion: reduce) {
+      .logo, h1 { animation: none !important; }
     }
   </style>
 </head>
 <body>
-  <img class="logo" src="https://cdn-icons-png.flaticon.com/512/724/724715.png" alt="Logo Chat Chapin" />
-  <h1>CHAT CHAPIN</h1>
-  <div>
-    <button class="btn" onClick="window.location.href='chapiness.html'">Chat Guatemala.</button>
-    <button class="btn" onClick="window.location.href='chapinessexo.html'" style="margin-left:20px">Chat Guatemala 2.</button>
-	<button class="btn" onClick="window.location.href='salapropia.html'" style="margin-left:20px">Haz tu Propia Sala.</button>
-  </div>
-  <canvas id="particles-bg"></canvas>
+  <main>
+    <img class="logo" src="https://cdn-icons-png.flaticon.com/512/724/724715.png" alt="Logo Chat Chapin" />
+    <h1>CHAT CHAPIN</h1>
+
+    <div class="actions" role="group" aria-label="Acciones principales">
+      <a class="btn" href="chapiness.html">Chat Guatemala</a>
+      <a class="btn" href="chapinessexo.html">Chat Guatemala 2</a>
+      <a class="btn" href="salapropia.html">Haz tu Propia Sala</a>
+    </div>
+  </main>
+
+  <canvas id="particles-bg" aria-hidden="true"></canvas>
 
   <script defer src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    // Partículas con estilo robótico/neón
+    // Partículas con estilo neón (se desactivan si el usuario prefiere menos movimiento)
     const shouldAnimate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (shouldAnimate && window.particlesJS) {
       particlesJS('particles-bg', {
         particles: {
-          number: { value: 100, density: { enable: true, value_area: 900 } },
-          color: { value: ['#00ffff', '#00ffcc', '#0077ff'] }, // neón azul-cian
-          shape: { type: 'polygon', polygon: { nb_sides: 6 } }, // formas hexagonales
+          number: { value: 90, density: { enable: true, value_area: 900 } },
+          color: { value: ['#00ffff', '#00ffcc', '#0077ff'] },
+          shape: { type: 'polygon', polygon: { nb_sides: 6 } },
           opacity: { value: 0.6, random: true },
-          size: { value: 4, random: true },
-          line_linked: {
-            enable: true,
-            distance: 120,
-            color: '#00ffff',
-            opacity: 0.3,
-            width: 1.2
-          },
-          move: {
-            enable: true,
-            speed: 2.5,
-            direction: 'none',
-            random: true,
-            straight: false,
-            out_mode: 'out'
-          }
+          size: { value: 3.6, random: true },
+          line_linked: { enable: true, distance: 120, color: '#00ffff', opacity: 0.3, width: 1.1 },
+          move: { enable: true, speed: 2.2, direction: 'none', random: true, straight: false, out_mode: 'out' }
         },
         interactivity: {
           detect_on: 'canvas',
-          events: {
-            onhover: { enable: true, mode: 'repulse' },
-            onclick: { enable: true, mode: 'push' },
-            resize: true
-          },
-          modes: {
-            repulse: { distance: 120, duration: 0.4 },
-            push: { particles_nb: 4 }
-          }
+          events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+          modes: { repulse: { distance: 120, duration: 0.4 }, push: { particles_nb: 4 } }
         },
         retina_detect: true
       });
@@ -142,6 +166,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
