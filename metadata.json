@@ -1,0 +1,6 @@
+{
+  "name": "XeroxChat",
+  "description": "Aplicación de chat en tiempo real con TypeScript, Express y Socket.IO.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
